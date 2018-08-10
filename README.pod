@@ -11,7 +11,7 @@ Meh - Moo, purloined sugar, defaults
     use Meh;
     
     ro onetwothree => 123;
-    lazy onetwothreebytwo => sub( $self ) { $self->onetwothree * 2 }
+    lazy onetwothreebytwo => sub( $self ) { $self->onetwothree * 2 };
 
 =head1 DESCRIPTION
 
