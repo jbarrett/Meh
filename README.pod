@@ -1,0 +1,19 @@
+=pod
+
+=encoding utf-8
+
+=head1 NAME
+
+Meh - Moo, purloined sugar, defaults
+
+=head1 SYNOPSIS
+
+    use Meh;
+    
+    ro onetwothree => 123;
+    lazy onetwothreebytwo => sub( $self ) { $self->onetwothree * 2 }
+
+=head1 DESCRIPTION
+
+Meh is mostly Moo with shorthand and handy defaults.
+
