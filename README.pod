@@ -15,5 +15,5 @@ Meh - Moo, purloined sugar, defaults
 
 =head1 DESCRIPTION
 
-Meh is mostly Moo with shorthand and handy defaults.
+Meh imports Moo with shorthand and handy defaults.
 
