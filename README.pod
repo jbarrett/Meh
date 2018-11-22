@@ -12,6 +12,15 @@ Meh - Moo, purloined sugar, defaults
     
     ro onetwothree => 123;
     lazy onetwothreebytwo => sub( $self ) { $self->onetwothree * 2 };
+    
+    rwp flag => 1;
+    rw volatile => 0,
+       required => 1,
+       coerce => sub( $val ) { !!$val };
+    
+    ro log => undef,
+       required => 1,
+       isa => FileHandle;
 
 =head1 DESCRIPTION
 
