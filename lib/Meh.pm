@@ -38,6 +38,13 @@ use Scalar::Util qw/ reftype /;
             $use->import::into( $caller, '-all' );
         }
 
+        for my $optionaluse ( qw/
+                Quote::Code
+            / ) {
+            next unless eval qq{ require $optionaluse; };
+            $optionaluse->import::into( $caller );
+        }
+
         for my $feature ( qw/ signatures state say / ) {
             feature->import::into( $caller, $feature );
         }
