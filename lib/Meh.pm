@@ -44,8 +44,6 @@ use Scalar::Util qw/ reftype /;
 
         warnings->unimport::out_of( $caller, 'experimental::signatures' );
 
-        return if $type eq 'role';
-
         # h/t MooX::ShortHas
         my $has = $caller->can( 'has' ) or die "Moo not loaded in $caller";
 
