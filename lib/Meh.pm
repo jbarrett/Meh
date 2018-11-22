@@ -30,11 +30,16 @@ use Scalar::Util qw/ reftype /;
 
         for my $use ( qw/
                 strict warnings utf8 Carp
+            / ) {
+            $use->import::into( $caller );
+        }
+
+        for my $use ( qw/
                 Types::Standard
                 Types::Common::String
                 Types::Common::Numeric
             / ) {
-            $use->import::into( $caller );
+            $use->import::into( $caller, '-all' );
         }
 
         for my $feature ( qw/ signatures state say / ) {
