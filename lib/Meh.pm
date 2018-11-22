@@ -13,16 +13,6 @@ use Scalar::Util qw/ reftype /;
     sub import ( $module, $type = 'class' ) {
         my ( $caller, $filename ) = caller;
 
-        for my $use ( qw/
-                strict warnings utf8 Carp
-            / ) {
-            $use->import::into( $caller );
-        }
-
-        for my $feature ( qw/ signatures state say / ) {
-            feature->import::into( $caller, $feature );
-        }
-
         if ( $type eq 'role' ) {
             require Moo::Role;
             Moo::Role->import::into( $caller );
@@ -36,6 +26,19 @@ use Scalar::Util qw/ reftype /;
         else {
             require Moo;
             Moo->import::into( $caller );
+        }
+
+        for my $use ( qw/
+                strict warnings utf8 Carp
+                Types::Standard
+                Types::Common::String
+                Types::Common::Numeric
+            / ) {
+            $use->import::into( $caller );
+        }
+
+        for my $feature ( qw/ signatures state say / ) {
+            feature->import::into( $caller, $feature );
         }
 
         warnings->unimport::out_of( $caller, 'experimental::signatures' );
