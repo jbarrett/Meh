@@ -17,3 +17,18 @@ Meh - Moo, purloined sugar, defaults
 
 Meh imports Moo with shorthand and handy defaults.
 
+=head1 SEE ALSO
+
+=over
+ 
+=item *
+ 
+L<MooX::ShortHas>
+
+=item *
+
+L<Mew>
+
+=back
+
+=cut
