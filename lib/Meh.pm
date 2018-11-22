@@ -7,6 +7,7 @@ use warnings;
 use feature 'signatures';
 no warnings 'experimental::signatures';
 use Moo::_Utils;
+use Scalar::Util qw/ reftype /;
 
 {
     sub import ( $module, $type = 'class' ) {
@@ -44,19 +45,21 @@ use Moo::_Utils;
         # h/t MooX::ShortHas
         my $has = $caller->can( 'has' ) or die "Moo not loaded in $caller";
 
-        _install_coderef $caller . '::ro' => sub( $name, $value, $params = {} ) {
-            $has->( $name, is => 'ro', %{ $params },
-                ( $value
-                    ? ( default => ref $value eq 'CODE'
-                        ? $value
-                        : sub { $value } )
-                    : ()
-                )
-            );
-        };
+        for my $is ( qw/ rw ro rwp / ) {
+            _install_coderef $caller . "::$is" => sub( $name, $value, %params ) {
+                $has->( $name, is => $is, %params,
+                    ( $value && !$params{required}
+                        ? ( default => reftype $value eq 'CODE'
+                            ? $value
+                            : sub { $value } )
+                        : ()
+                    )
+                );
+            };
+        }
 
-        _install_coderef $caller . '::lazy' => sub( $name, $builder, $params = {} ) {
-            $has->( $name, is => 'lazy', builder => $builder, %{ $params } );
+        _install_coderef $caller . '::lazy' => sub( $name, $builder, %params ) {
+            $has->( $name, is => 'lazy', builder => $builder, %params );
         };
 
     }
