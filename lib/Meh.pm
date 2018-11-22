@@ -14,18 +14,14 @@ use Scalar::Util qw/ reftype /;
         my ( $caller, $filename ) = caller;
 
         if ( $type eq 'role' ) {
-            require Moo::Role;
-            Moo::Role->import::into( $caller );
+            'Moo::Role'->import::into( $caller );
         }
         elsif ( $type eq 'script' ) {
-            require Moo;
-            require MooX::Options;
-            Moo->import::into( $caller );
-            MooX::Options->import::into( $caller );
+            'Moo'->import::into( $caller );
+            'MooX::Options'->import::into( $caller );
         }
         else {
-            require Moo;
-            Moo->import::into( $caller );
+            'Moo'->import::into( $caller );
         }
 
         for my $use ( qw/
