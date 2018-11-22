@@ -5,7 +5,7 @@ use Import::Into;
 use strict;
 use warnings;
 use feature 'signatures';
-no warnings 'experimental::signatures';
+no warnings qw/ experimental::signatures uninitialized /;
 use Moo::_Utils;
 use Scalar::Util qw/ reftype /;
 
