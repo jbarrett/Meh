@@ -14,13 +14,10 @@ Meh - Moo, purloined sugar, defaults
     lazy onetwothreebytwo => sub( $self ) { $self->onetwothree * 2 };
     
     rwp flag => 1;
-    rw volatile => 0,
-       required => 1,
+    rw volatileflag => 0,
        coerce => sub( $val ) { !!$val };
     
-    ro log => undef,
-       required => 1,
-       isa => FileHandle;
+    required log => isa => FileHandle;
 
 =head1 DESCRIPTION
 

@@ -11,8 +11,7 @@ use Test::Exception;
 
     ro 'foo';
 
-    ro bar => undef,
-       required => 1;
+    required 'bar';
 
     rw baz => 20,
        coerce => sub( $val ) { $val + 2 };
@@ -21,11 +20,9 @@ use Test::Exception;
 
     lazy quux => sub( $self ) { $self->baz * 2 };
 
-    ro quuz => undef,
-       isa => NegativeInt;
+    ro quuz => isa => NegativeInt;
 
-    rw corge => undef,
-       isa => FileHandle;
+    rw corge => isa => FileHandle;
 
     sub change_qux( $self, $new ) {
         $self->_set_qux( $new );

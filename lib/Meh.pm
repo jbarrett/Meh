@@ -54,7 +54,11 @@ use Scalar::Util qw/ reftype /;
         my $has = $caller->can( 'has' ) or die "Moo not loaded in $caller";
 
         for my $is ( qw/ rw ro rwp / ) {
-            Moo::_install_tracked $caller => $is => sub( $name, $value = undef, %params ) {
+            Moo::_install_tracked $caller => $is => sub( $name, @params ) {
+                my $value = @params % 2
+                    ? shift @params
+                    : undef;
+                my %params = @params;
                 $has->( $name, is => $is, %params,
                     ( $value && !$params{required}
                         ? ( default => reftype $value eq 'CODE'
@@ -66,8 +70,12 @@ use Scalar::Util qw/ reftype /;
             };
         }
 
-        Moo::_install_tracked $caller => 'lazy' => sub( $name, $builder, %params ) {
-            $has->( $name, is => 'lazy', builder => $builder, %params );
+        Moo::_install_tracked $caller => 'lazy' => sub( $name, $builder, @params ) {
+            $has->( $name, is => 'lazy', builder => $builder, @params );
+        };
+
+        Moo::_install_tracked $caller => 'required' => sub( $name, @params ) {
+            $has->( $name, is => 'ro', required => 1, @params );
         };
 
     }
