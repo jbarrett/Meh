@@ -58,9 +58,8 @@ use Scalar::Util qw/ reftype /;
                 my $value = @params % 2
                     ? shift @params
                     : undef;
-                my %params = @params;
-                $has->( $name, is => $is, %params,
-                    ( $value && !$params{required}
+                $has->( $name, is => $is, @params,
+                    ( $value
                         ? ( default => reftype $value eq 'CODE'
                             ? $value
                             : sub { $value } )
