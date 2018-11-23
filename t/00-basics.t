@@ -9,7 +9,7 @@ use Test::Exception;
 
     use Meh;
 
-    ro foo => undef;
+    ro 'foo';
 
     ro bar => undef,
        required => 1;
@@ -17,7 +17,7 @@ use Test::Exception;
     rw baz => 20,
        coerce => sub( $val ) { $val + 2 };
 
-    rwp qux => undef;
+    rwp 'qux';
 
     lazy quux => sub( $self ) { $self->baz * 2 };
 

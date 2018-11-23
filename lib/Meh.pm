@@ -1,12 +1,11 @@
 package Meh;
 
-use Import::Into;
-
 use strict;
 use warnings;
+use Moo;
+use Import::Into;
 use feature 'signatures';
 no warnings qw/ experimental::signatures uninitialized /;
-use Moo::_Utils;
 use Scalar::Util qw/ reftype /;
 
 {
@@ -55,7 +54,7 @@ use Scalar::Util qw/ reftype /;
         my $has = $caller->can( 'has' ) or die "Moo not loaded in $caller";
 
         for my $is ( qw/ rw ro rwp / ) {
-            _install_coderef $caller . "::$is" => sub( $name, $value, %params ) {
+            Moo::_install_tracked $caller => $is => sub( $name, $value = undef, %params ) {
                 $has->( $name, is => $is, %params,
                     ( $value && !$params{required}
                         ? ( default => reftype $value eq 'CODE'
@@ -67,7 +66,7 @@ use Scalar::Util qw/ reftype /;
             };
         }
 
-        _install_coderef $caller . '::lazy' => sub( $name, $builder, %params ) {
+        Moo::_install_tracked $caller => 'lazy' => sub( $name, $builder, %params ) {
             $has->( $name, is => 'lazy', builder => $builder, %params );
         };
 
