@@ -4,9 +4,17 @@ use strict;
 use warnings;
 use Moo;
 use Import::Into;
+use Module::Runtime qw/ require_module /;
 use feature 'signatures';
 no warnings qw/ experimental::signatures uninitialized /;
 use Scalar::Util qw/ reftype /;
+
+sub _dbic_base_class( $class ) {
+    my ( $guess ) = $class =~ /(.*::Schema::Result)/;
+    eval { require_module $guess };
+    return 'DBIx::Class::Core' if $@;
+    $guess;
+}
 
 {
     sub import ( $module, $type = 'class' ) {
@@ -14,6 +22,10 @@ use Scalar::Util qw/ reftype /;
 
         if ( $type eq 'role' ) {
             'Moo::Role'->import::into( $caller );
+        }
+        if ( $type eq 'dbic' ) {
+            'Moo'->import::into( $caller );
+            'DBIx::Class::Candy'->import::into( $caller, -base => _dbic_base_class( $caller ) );
         }
         elsif ( $type eq 'script' ) {
             'Moo'->import::into( $caller );
