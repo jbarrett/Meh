@@ -31,6 +31,9 @@ sub _dbic_base_class( $class ) {
             'Moo'->import::into( $caller );
             'MooX::Options'->import::into( $caller );
         }
+        elsif ( $type eq 'nomoo' ) {
+            # ¯\_(ツ)_/¯
+        }
         else {
             'Moo'->import::into( $caller );
         }
@@ -41,6 +44,14 @@ sub _dbic_base_class( $class ) {
             $use->import::into( $caller );
         }
 
+        for my $feature ( qw/ signatures state say / ) {
+            feature->import::into( $caller, $feature );
+        }
+
+        warnings->unimport::out_of( $caller, 'experimental::signatures' );
+
+        return unless my $has = $caller->can( 'has' );
+
         for my $use ( qw/
                 Types::Standard
                 Types::Common::String
@@ -48,15 +59,6 @@ sub _dbic_base_class( $class ) {
             / ) {
             $use->import::into( $caller, '-all' );
         }
-
-        for my $feature ( qw/ signatures state say / ) {
-            feature->import::into( $caller, $feature );
-        }
-
-        warnings->unimport::out_of( $caller, 'experimental::signatures' );
-
-        # h/t MooX::ShortHas
-        my $has = $caller->can( 'has' ) or die "Moo not loaded in $caller";
 
         for my $is ( qw/ rw ro rwp / ) {
             Moo::_install_tracked $caller => $is => sub( $name, @params ) {
