@@ -24,8 +24,8 @@ sub _dbic_base_class( $class ) {
             'Moo::Role'->import::into( $caller );
         }
         if ( $type eq 'dbic' ) {
-            'Moo'->import::into( $caller );
             'DBIx::Class::Candy'->import::into( $caller, -base => _dbic_base_class( $caller ) );
+            'Moo'->import::into( $caller );
         }
         elsif ( $type eq 'script' ) {
             'Moo'->import::into( $caller );
