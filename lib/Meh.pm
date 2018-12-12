@@ -17,19 +17,19 @@ sub _dbic_base_class( $class ) {
 }
 
 {
-    sub import ( $module, $type = ':class' ) {
+    sub import ( $module, $type = ':class', @options ) {
         my ( $caller, $filename ) = caller;
 
         if ( $type eq ':role' ) {
             'Moo::Role'->import::into( $caller );
         }
         if ( $type eq ':dbic' ) {
-            'DBIx::Class::Candy'->import::into( $caller, -base => _dbic_base_class( $caller ) );
+            'DBIx::Class::Candy'->import::into( $caller, -base => _dbic_base_class( $caller ), @options );
             'Moo'->import::into( $caller );
         }
         elsif ( $type eq ':script' ) {
             'Moo'->import::into( $caller );
-            'MooX::Options'->import::into( $caller );
+            'MooX::Options'->import::into( $caller, @options );
         }
         elsif ( $type eq ':nomoo' ) {
             # ¯\_(ツ)_/¯
