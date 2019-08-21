@@ -48,6 +48,8 @@ sub _dbic_base_class( $class ) {
             feature->import::into( $caller, $feature );
         }
 
+        'open'->import::into( $caller, qw/ :encoding(UTF-8) :std / );
+
         warnings->unimport::out_of( $caller, 'experimental::signatures' );
 
         return unless my $has = $caller->can( 'has' );
