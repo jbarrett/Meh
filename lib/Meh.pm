@@ -69,7 +69,7 @@ sub _dbic_base_class( $class ) {
                     : undef;
                 $has->( $name, is => $is, @params,
                     ( $value
-                        ? ( default => reftype $value eq 'CODE'
+                        ? ( builder => reftype $value eq 'CODE'
                             ? $value
                             : sub { $value } )
                         : ()
