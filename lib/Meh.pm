@@ -82,6 +82,10 @@ sub _dbic_base_class( $class ) {
             $has->( $name, is => 'lazy', builder => $builder, @params );
         };
 
+        Moo::_install_tracked $caller => 'instance' => sub( $name, $class, @params ) {
+            $has->( $name, is => 'lazy', builder => sub { "$class"->import::into( $caller ); return "$class"->new( @params ) } );
+        };
+
         Moo::_install_tracked $caller => 'required' => sub( $name, @params ) {
             $has->( $name, is => 'ro', required => 1, @params );
         };

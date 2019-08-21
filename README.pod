@@ -18,6 +18,9 @@ Meh - Moo, purloined sugar, defaults
        coerce => sub( $val ) { !!$val };
     
     required log => isa => FileHandle;
+    
+    instance loop => 'IO::Async::Loop';
+    instance json => 'JSON::MaybeXS', utf8 => 1;
 
 =head1 DESCRIPTION
 
