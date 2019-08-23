@@ -78,7 +78,8 @@ sub _resolve_imports( @imports ) {
             feature->import::into( $caller, $feature );
         }
 
-        'open'->import::into( $caller, qw/ :encoding(UTF-8) :std / );
+        'open'->import::into( $caller, qw/ :encoding(UTF-8) :std / )
+            unless $cfg->{noperlio};
 
         warnings->unimport::out_of( $caller, 'experimental::signatures' );
 
