@@ -8,6 +8,7 @@ use Module::Runtime qw/ require_module /;
 use feature 'signatures';
 no warnings qw/ experimental::signatures uninitialized /;
 use Scalar::Util qw/ reftype /;
+use Carp qw/ croak /;
 
 sub _dbic_base_class( $class ) {
     my ( $guess ) = $class =~ /(.*::Schema::Result)/;
@@ -16,22 +17,51 @@ sub _dbic_base_class( $class ) {
     $guess;
 }
 
+sub _resolve_imports( @imports ) {
+    my $mode_tags = +{
+        map {; ":$_" => 1 }
+        qw/ role dbic script nomoo moo /
+    };
+
+    my @local_imports = my @remote_imports = @imports;
+
+    for my $idx ( 0..$#imports ) {
+        if ( $imports[$idx] eq '--' ) {
+            @local_imports = @imports[0..$idx-1];
+            @remote_imports = @imports[$idx+1..$#imports];
+            last;
+        }
+    }
+
+    my @modes = grep { $mode_tags->{$_} } @local_imports;
+    croak sprintf(
+        "Unable to resolve modes %s",
+        join( ', ', @modes )
+    ) if @modes > 1;
+
+    my $cfg = +{ map { s/^://r => 1 } grep { /^:/ } @local_imports };
+
+    return ( $cfg, @remote_imports );
+}
+
 {
-    sub import ( $module, $type = ':class', @options ) {
+    sub import ( $module, @imports ) {
         my ( $caller, $filename ) = caller;
 
-        if ( $type eq ':role' ) {
+        my ( $cfg, @options ) = _resolve_imports( @imports );
+
+        if ( $cfg->{role} ) {
             'Moo::Role'->import::into( $caller );
         }
-        if ( $type eq ':dbic' ) {
+        elsif ( $cfg->{dbic} ) {
             'DBIx::Class::Candy'->import::into( $caller, -base => _dbic_base_class( $caller ), @options );
             'Moo'->import::into( $caller );
         }
-        elsif ( $type eq ':script' ) {
+        elsif ( $cfg->{script} ) {
             'Moo'->import::into( $caller );
             'MooX::Options'->import::into( $caller, @options );
         }
-        elsif ( $type eq ':nomoo' ) {
+        elsif ( $cfg->{nomoo} ) {
             # ¯\_(ツ)_/¯
         }
         else {
