@@ -19,8 +19,8 @@ Meh - Moo, purloined sugar, defaults
     
     required log => isa => FileHandle;
     
-    instance loop => 'IO::Async::Loop';
-    instance json => 'JSON::MaybeXS', utf8 => 1;
+    object loop => 'IO::Async::Loop';
+    object json => 'JSON::MaybeXS', utf8 => 1;
 
 =head1 DESCRIPTION
 

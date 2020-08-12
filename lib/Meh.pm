@@ -59,7 +59,7 @@ sub _resolve_imports( @imports ) {
         }
         elsif ( $cfg->{script} ) {
             'Moo'->import::into( $caller );
-            'MooX::Options'->import::into( $caller, @options );
+            'CLI::Osprey'->import::into( $caller, @options );
         }
         elsif ( $cfg->{nomoo} ) {
             # ¯\_(ツ)_/¯
@@ -69,7 +69,7 @@ sub _resolve_imports( @imports ) {
         }
 
         for my $use ( qw/
-                strict warnings utf8 Carp
+                strict warnings utf8 Carp English
             / ) {
             $use->import::into( $caller );
         }
@@ -113,7 +113,7 @@ sub _resolve_imports( @imports ) {
             $has->( $name, is => 'lazy', builder => $builder, @params );
         };
 
-        Moo::_install_tracked $caller => 'instance' => sub( $name, $class, @params ) {
+        Moo::_install_tracked $caller => 'object' => sub( $name, $class, @params ) {
             $has->( $name, is => 'ro', builder => sub {
                 "$class"->import::into( $caller ); return "$class"->new( @params )
             } );
