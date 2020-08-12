@@ -59,7 +59,7 @@ sub _resolve_imports( @imports ) {
         }
         elsif ( $cfg->{script} ) {
             'Moo'->import::into( $caller );
-            'MooX::Options'->import::into( $caller, @options );
+            'CLI::Osprey'->import::into( $caller, @options );
         }
         elsif ( $cfg->{nomoo} ) {
             # ¯\_(ツ)_/¯
