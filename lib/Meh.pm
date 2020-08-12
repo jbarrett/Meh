@@ -69,7 +69,7 @@ sub _resolve_imports( @imports ) {
         }
 
         for my $use ( qw/
-                strict warnings utf8 Carp
+                strict warnings utf8 Carp English
             / ) {
             $use->import::into( $caller );
         }
