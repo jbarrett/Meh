@@ -74,7 +74,7 @@ sub _resolve_imports( @imports ) {
             $use->import::into( $caller );
         }
 
-        for my $feature ( qw/ signatures state say / ) {
+        for my $feature ( qw/ signatures state say isa / ) {
             feature->import::into( $caller, $feature );
         }
 
