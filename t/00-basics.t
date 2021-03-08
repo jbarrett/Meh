@@ -51,7 +51,7 @@ lives_ok  sub { FooTest->new( bar => 1, corge => $fh ) },
 my $foo = FooTest->new( bar => 1 );
 
 throws_ok sub { $foo->qux( 'asd' ) },
-          qr/Usage: FooTest::qux\(self\)/,
+          qr/read-only accessor/,
           'rwp set properly - set accessor';
 lives_ok  sub { $foo->change_qux('asd') },
           'rwp set properly - internal set accessor';
