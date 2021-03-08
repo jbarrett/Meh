@@ -21,6 +21,8 @@ Meh - Moo, purloined sugar, defaults
     
     instance loop => 'IO::Async::Loop';
     instance json => 'JSON::MaybeXS', utf8 => 1;
+    
+    singleton logger => 'My::Logger', verbose = WARN;
 
 =head1 DESCRIPTION
 

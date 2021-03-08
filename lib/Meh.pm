@@ -5,10 +5,12 @@ use warnings;
 use Moo;
 use Import::Into;
 use Module::Runtime qw/ require_module /;
-use feature 'signatures';
+use feature qw/ signatures /;
 no warnings qw/ experimental::signatures uninitialized /;
 use Scalar::Util qw/ reftype /;
 use Carp qw/ croak /;
+
+my $_instance_cache;
 
 sub _dbic_base_class( $class ) {
     my ( $guess ) = $class =~ /(.*::Schema::Result)/;
@@ -113,9 +115,20 @@ sub _resolve_imports( @imports ) {
             $has->( $name, is => 'lazy', builder => $builder, @params );
         };
 
+        my $instance = sub( $class, @params ) {
+            "$class"->import::into( $caller ); return "$class"->new( @params )
+        };
+
+        Moo::_install_tracked $caller => 'singleton' => sub( $name, $class, @params ) {
+            $has->( $name, is => 'ro', builder => sub {
+                return $_instance_cache->{ $class } if $_instance_cache->{ $class };
+                $_instance_cache->{ $class } = $instance->( $class, @params )
+            } );
+        };
+
         Moo::_install_tracked $caller => 'instance' => sub( $name, $class, @params ) {
             $has->( $name, is => 'ro', builder => sub {
-                "$class"->import::into( $caller ); return "$class"->new( @params )
+                $instance->( $class, @params )
             } );
         };
 
