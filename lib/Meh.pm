@@ -76,8 +76,12 @@ sub _resolve_imports( @imports ) {
             $use->import::into( $caller );
         }
 
-        for my $feature ( qw/ signatures state say isa / ) {
+        for my $feature ( qw/ state say / ) {
             feature->import::into( $caller, $feature );
+        }
+
+        for my $experimental ( qw/ signatures isa / ) {
+            experimental->import::into( $caller, $experimental );
         }
 
         'open'->import::into( $caller, qw/ :encoding(UTF-8) :std / )
