@@ -115,20 +115,18 @@ sub _resolve_imports( @imports ) {
             $has->( $name, is => 'lazy', builder => $builder, @params );
         };
 
-        my $instance = sub( $class, @params ) {
-            "$class"->import::into( $caller ); return "$class"->new( @params )
-        };
-
         Moo::_install_tracked $caller => 'singleton' => sub( $name, $class, @params ) {
             $has->( $name, is => 'ro', builder => sub {
+                "$class"->import::into( $caller );
                 return $_instance_cache->{ $class } if $_instance_cache->{ $class };
-                $_instance_cache->{ $class } = $instance->( $class, @params )
+                $_instance_cache->{ $class } = "$class"->new( @params )
             } );
         };
 
         Moo::_install_tracked $caller => 'instance' => sub( $name, $class, @params ) {
             $has->( $name, is => 'ro', builder => sub {
-                $instance->( $class, @params )
+                "$class"->import::into( $caller );
+                "$class"->new( @params );
             } );
         };
 
