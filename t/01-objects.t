@@ -10,7 +10,7 @@ use Test::Exception;
     use Meh;
 
     singleton http1 => 'HTTP::Tiny', agent => 'bar';
-    instance  http2 => 'HTTP::Tiny', agent => 'foo';
+    object http2 => 'HTTP::Tiny', agent => 'foo';
 
     1;
 }

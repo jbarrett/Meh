@@ -123,11 +123,13 @@ sub _resolve_imports( @imports ) {
             $has->( $name, is => 'ro', builder => sub {
                 "$class"->import::into( $caller );
                 return $_instance_cache->{ $class } if $_instance_cache->{ $class };
-                $_instance_cache->{ $class } = "$class"->new( @params )
+                $_instance_cache->{ $class } = "$class"->can('instance')
+                    ? "$class"->instance( @params )
+                    : "$class"->new( @params )
             } );
         };
 
-        Moo::_install_tracked $caller => 'instance' => sub( $name, $class, @params ) {
+        Moo::_install_tracked $caller => 'object' => sub( $name, $class, @params ) {
             $has->( $name, is => 'ro', builder => sub {
                 "$class"->import::into( $caller );
                 "$class"->new( @params );
