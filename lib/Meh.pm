@@ -25,7 +25,8 @@ sub _resolve_imports( @imports ) {
         qw/ role dbic script nomoo moo /
     };
 
-    my @local_imports = my @remote_imports = @imports;
+    my @remote_imports;
+    my @local_imports = @imports;
 
     for my $idx ( 0..$#imports ) {
         if ( $imports[$idx] eq '--' ) {
