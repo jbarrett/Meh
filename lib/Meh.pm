@@ -85,10 +85,12 @@ sub _resolve_imports( @imports ) {
             experimental->import::into( $caller, $experimental );
         }
 
+        'Syntax::Keyword::Try'->import::into( $caller, qw/ try try_value / );
+
         'open'->import::into( $caller, qw/ :encoding(UTF-8) :std / )
             unless $cfg->{noperlio};
 
-        warnings->unimport::out_of( $caller, 'experimental::signatures' );
+        warnings->unimport::out_of( $caller, 'experimental' );
 
         return unless my $has = $caller->can( 'has' );
 
